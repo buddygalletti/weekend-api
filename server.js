@@ -68,4 +68,60 @@ app.delete('/api/users/:id', async (req, res, next) => {
   }
 });
 
+// All of the Department routes
+app.get('/api/departments', async (req, res, next) => {
+  try {
+    res.send(await Department.findAll());
+  } catch (ex) {
+    next(ex);
+  }
+});
+
+app.post('/api/departments', async (req, res, next) => {
+  try {
+    const [newDept, wasCreated] = await findOrCreate({
+      where: {
+        name: req.body.name
+      }
+    });
+    if (wasCreated) {
+      res.send(newDept);
+    }
+  } catch (ex) {
+    next(ex);
+  }
+});
+
+app.get('/api/departments/:id', async (req, res, next) => {
+  try {
+    res.send(await Department.findByPk(req.params.id));
+  } catch (ex) {
+    next(ex);
+  }
+});
+
+app.put('/api/departments/:id', async (req, res, next) => {
+  try {
+    const newDept = await Department.findByPk(req.params.id);
+    await newDept.update({
+      name: req.body.name
+    });
+    res.send(newDept);
+  } catch (ex) {
+    next(ex);
+  }
+});
+
+app.delete('/api/departments/:id', async (req, res, next) => {
+  try {
+    await Department.destroy({
+      where: {
+        id: req.params.id
+      }
+    });
+  } catch (ex) {
+    next(ex);
+  }
+});
+
 app.listen(port, () => console.log(`listening on port ${port}`));
