@@ -1,0 +1,26 @@
+{
+  "name": "weekend-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "db.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/buddygalletti/weekend-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/buddygalletti/weekend-api/issues"
+  },
+  "homepage": "https://github.com/buddygalletti/weekend-api#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^7.11.0",
+    "sequelize": "^5.9.3"
+  }
+}
