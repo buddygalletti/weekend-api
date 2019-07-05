@@ -12,7 +12,7 @@ app.use(require('cors')());
 syncAndSeed();
 
 // All of the User routes
-app.get('/users', async (req, res, next) => {
+app.get('/api/users', async (req, res, next) => {
   try {
     res.send(await User.findAll());
   } catch (ex) {
@@ -20,7 +20,7 @@ app.get('/users', async (req, res, next) => {
   }
 });
 
-app.post('/users', async (req, res, next) => {
+app.post('/api/users', async (req, res, next) => {
   try {
     const [newCrew, wasCreated] = await findOrCreate({
       where: {
@@ -35,6 +35,37 @@ app.post('/users', async (req, res, next) => {
   }
 });
 
-app.put('/users/:id', async (req, res, next) => {});
+app.get('/api/users/:id', async (req, res, next) => {
+  try {
+    res.send(await User.findByPk(req.params.id));
+  } catch (ex) {
+    next(ex);
+  }
+});
+
+app.put('/api/users/:id', async (req, res, next) => {
+  try {
+    const newCrew = await User.findByPk(req.params.id);
+    await newCrew.update({
+      name: req.body.name,
+      departmentId: req.body.departmentId
+    });
+    res.send(newCrew);
+  } catch (ex) {
+    next(ex);
+  }
+});
+
+app.delete('/api/users/:id', async (req, res, next) => {
+  try {
+    await User.destroy({
+      where: {
+        id: req.params.id
+      }
+    });
+  } catch (ex) {
+    next(ex);
+  }
+});
 
 app.listen(port, () => console.log(`listening on port ${port}`));
