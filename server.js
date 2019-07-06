@@ -8,6 +8,7 @@ const { syncAndSeed } = require('./db');
 const app = express();
 
 app.use(require('cors')());
+app.use(express.json());
 
 syncAndSeed();
 
@@ -22,7 +23,7 @@ app.get('/api/users', async (req, res, next) => {
 
 app.post('/api/users', async (req, res, next) => {
   try {
-    const [newCrew, wasCreated] = await findOrCreate({
+    const [newCrew, wasCreated] = await User.findOrCreate({
       where: {
         name: req.body.name
       }
@@ -50,6 +51,7 @@ app.put('/api/users/:id', async (req, res, next) => {
       name: req.body.name,
       departmentId: req.body.departmentId
     });
+    newCrew.save();
     res.send(newCrew);
   } catch (ex) {
     next(ex);
@@ -63,6 +65,7 @@ app.delete('/api/users/:id', async (req, res, next) => {
         id: req.params.id
       }
     });
+    res.sendStatus(204);
   } catch (ex) {
     next(ex);
   }
@@ -79,7 +82,7 @@ app.get('/api/departments', async (req, res, next) => {
 
 app.post('/api/departments', async (req, res, next) => {
   try {
-    const [newDept, wasCreated] = await findOrCreate({
+    const [newDept, wasCreated] = await Department.findOrCreate({
       where: {
         name: req.body.name
       }
@@ -106,6 +109,7 @@ app.put('/api/departments/:id', async (req, res, next) => {
     await newDept.update({
       name: req.body.name
     });
+    newDept.save();
     res.send(newDept);
   } catch (ex) {
     next(ex);
@@ -119,6 +123,7 @@ app.delete('/api/departments/:id', async (req, res, next) => {
         id: req.params.id
       }
     });
+    res.sendStatus(204);
   } catch (ex) {
     next(ex);
   }
